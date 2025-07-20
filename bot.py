@@ -73,7 +73,7 @@ async def download_playlist(update: Update, context: ContextTypes.DEFAULT_TYPE,
         'no_warnings': True,
         'ignoreerrors': False,
         'extract_flat': False,
-        'playlistend': 200,  # Лимит треков для безопасности
+        'playlistend': 150,  # Лимит треков для безопасности
     }
 
     try:
