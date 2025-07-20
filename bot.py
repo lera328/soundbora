@@ -10,6 +10,9 @@ from typing import List
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 import yt_dlp
+import time
+import random
+
 
 # Настройка логгирования
 logging.basicConfig(
@@ -73,6 +76,7 @@ async def download_playlist(update: Update, context: ContextTypes.DEFAULT_TYPE,
         'no_warnings': True,
         'ignoreerrors': False,
         'extract_flat': False,
+        'extractor_args': {'soundcloud': {'playlist_items': '1-10000'}},
         'playlistend': 300,  # Лимит треков для безопасности
     }
 
@@ -121,6 +125,8 @@ async def download_playlist(update: Update, context: ContextTypes.DEFAULT_TYPE,
                                 await send_audio_file(update, context, filepath, track)
                                 track_count += 1
                                 os.remove(filepath)
+                                time.sleep(random.uniform(2, 5))  # Пауза 2-5 секунд между треками
+                    
                 except yt_dlp.utils.DownloadError as e:
                     logger.error(f"Ошибка загрузки трека {track_idx+1}: {str(e)}")
                     await update.message.reply_text(f"\u26a0️ Ошибка загрузки трека {track_idx+1}/{total_tracks}: {str(e)[:100]}")
